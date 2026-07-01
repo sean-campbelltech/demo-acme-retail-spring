@@ -1,6 +1,5 @@
 package com.acmeretail.oms.service;
 
-import com.acmeretail.oms.config.OmsProperties;
 import com.acmeretail.oms.domain.enums.LoyaltyTier;
 import com.acmeretail.oms.domain.vo.Money;
 import org.springframework.stereotype.Service;
@@ -17,11 +16,11 @@ import java.math.BigDecimal;
 @Service
 public class DiscountService {
 
-    private final OmsProperties properties;
-
-    public DiscountService(OmsProperties properties) {
-        this.properties = properties;
-    }
+    /**
+     * Upper bound, as a percentage, on the combined effect of stacked discounts.
+     * Protects margins when multiple promotions apply to the same order.
+     */
+    private static final BigDecimal MAX_STACKED_DISCOUNT_PERCENT = new BigDecimal("40");
 
     /**
      * Computes the value given away by a buy-x-get-y promotion. For every complete
@@ -71,11 +70,10 @@ public class DiscountService {
         if (proposedDiscount == null || subtotal == null) {
             throw new IllegalArgumentException("discount and subtotal are required");
         }
-        BigDecimal maxPercent = properties.getMaxStackedDiscountPercent();
-        if (maxPercent == null || maxPercent.signum() <= 0) {
+        if (MAX_STACKED_DISCOUNT_PERCENT.signum() <= 0) {
             return proposedDiscount;
         }
-        Money ceiling = subtotal.percentage(maxPercent.doubleValue());
+        Money ceiling = subtotal.percentage(MAX_STACKED_DISCOUNT_PERCENT.doubleValue());
         return proposedDiscount.isGreaterThan(ceiling) ? ceiling : proposedDiscount;
     }
 
