@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+.diffblue/init.gradle
+.diffblue/cache/env.json
