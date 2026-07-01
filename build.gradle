@@ -10,8 +10,8 @@ description = 'ACME Retail Order Management System'
 
 java {
     toolchain {
-        // The application targets Java 21 (an LTS above the Spring Boot 4 baseline).
-        languageVersion = JavaLanguageVersion.of(21)
+        // The application targets Java 17 (an LTS above the Spring Boot 4 baseline).
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
